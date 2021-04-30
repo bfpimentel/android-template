@@ -3,13 +3,9 @@ package dev.pimentel.template.shared.navigator
 import androidx.navigation.NavController
 import dev.pimentel.template.R
 import dev.pimentel.template.TestDispatchersProvider
-import dev.pimentel.template.presentation.example.WelcomeFragmentDirections
+import dev.pimentel.template.presentation.example.ExampleFragmentDirections
 import dev.pimentel.template.shared.dispatchers.DispatchersProvider
-import io.mockk.confirmVerified
-import io.mockk.every
-import io.mockk.justRun
-import io.mockk.mockk
-import io.mockk.verify
+import io.mockk.*
 import kotlinx.coroutines.test.TestCoroutineDispatcher
 import kotlinx.coroutines.test.runBlockingTest
 import org.junit.jupiter.api.BeforeEach
@@ -29,7 +25,7 @@ class NavigatorTest {
     @Test
     fun `should bind navigator and navigate`() = testCoroutineDispatcher.runBlockingTest {
         val navController = mockk<NavController>(relaxed = true)
-        val directions = WelcomeFragmentDirections.toCountersFragment()
+        val directions = ExampleFragmentDirections.toExampleFragment()
 
         justRun { navController.navigate(directions) }
 
@@ -43,7 +39,7 @@ class NavigatorTest {
     @Test
     fun `should unbind navigator and do nothing when trying to navigate`() = testCoroutineDispatcher.runBlockingTest {
         val navController = mockk<NavController>(relaxed = true)
-        val directions = WelcomeFragmentDirections.toCountersFragment()
+        val directions = ExampleFragmentDirections.toExampleFragment()
 
         navigator.bind(navController)
         navigator.unbind()
@@ -68,7 +64,7 @@ class NavigatorTest {
     @Test
     fun `should bind navigator and pop with destination`() = testCoroutineDispatcher.runBlockingTest {
         val navController = mockk<NavController>(relaxed = true)
-        val destinationId = R.id.countersFragment
+        val destinationId = R.id.exampleFragment
         val inclusive = true
 
         every { navController.popBackStack(destinationId, inclusive) } returns true

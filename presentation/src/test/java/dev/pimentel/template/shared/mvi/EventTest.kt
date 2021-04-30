@@ -1,8 +1,5 @@
 package dev.pimentel.template.shared.mvi
 
-import dev.pimentel.template.shared.mvi.Event
-import dev.pimentel.template.shared.mvi.handleEvent
-import dev.pimentel.template.shared.mvi.toEvent
 import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Test

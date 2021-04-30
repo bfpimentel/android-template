@@ -3,18 +3,6 @@ package dev.pimentel.template.data.di
 import android.content.Context
 import android.content.SharedPreferences
 import androidx.room.Room
-import dev.pimentel.template.data.R
-import dev.pimentel.template.data.database.CountersDatabase
-import dev.pimentel.template.data.generator.IdGenerator
-import dev.pimentel.template.data.generator.IdGeneratorImpl
-import dev.pimentel.template.data.repository.CountersRepositoryImpl
-import dev.pimentel.template.data.repository.PreferencesRepositoryImpl
-import dev.pimentel.template.data.sources.local.CountersLocalDataSource
-import dev.pimentel.template.data.sources.local.PreferencesLocalDataSource
-import dev.pimentel.template.data.sources.local.PreferencesLocalDataSourceImpl
-import dev.pimentel.template.data.sources.remote.CountersRemoteDataSource
-import dev.pimentel.template.domain.repository.CountersRepository
-import dev.pimentel.template.domain.repository.PreferencesRepository
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import dagger.Module
@@ -22,6 +10,12 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import dev.pimentel.template.data.R
+import dev.pimentel.template.data.generator.IdGenerator
+import dev.pimentel.template.data.generator.IdGeneratorImpl
+import dev.pimentel.template.data.repository.ExampleRepositoryImpl
+import dev.pimentel.template.data.sources.local.ExampleLocalDataSource
+import dev.pimentel.template.domain.repository.ExampleRepository
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -67,23 +61,9 @@ object DataModules {
             .addConverterFactory(MoshiConverterFactory.create(moshi))
             .build()
     }
-
-    @Provides
-    @Singleton
-    fun provideCountersRemoteDataSource(retrofit: Retrofit): CountersRemoteDataSource =
-        retrofit.create(CountersRemoteDataSource::class.java)
     // endregion
 
     // region LOCAL
-    @Provides
-    @Singleton
-    fun provideDatabase(@ApplicationContext context: Context) =
-        Room.databaseBuilder(
-            context,
-            CountersDatabase::class.java,
-            CountersDatabase::class.simpleName!!
-        ).build()
-
     @Provides
     @Singleton
     fun provideIdGenerator(): IdGenerator = IdGeneratorImpl()
@@ -95,31 +75,13 @@ object DataModules {
 
     @Provides
     @Singleton
-    fun providePreferencesLocalDataSource(sharedPreferences: SharedPreferences): PreferencesLocalDataSource =
-        PreferencesLocalDataSourceImpl(sharedPreferences = sharedPreferences)
-
-    @Provides
-    @Singleton
-    fun provideCountersLocalDataSource(countersDatabase: CountersDatabase): CountersLocalDataSource =
-        countersDatabase.createCountersLocalDataSource()
+    fun provideExampleLocalDataSource(): ExampleLocalDataSource = ExampleLocalDataSource()
     // endregion
 
     // region REPOSITORY
     @Provides
     @Singleton
-    fun provideCountersRepository(
-        countersRemoteDataSource: CountersRemoteDataSource,
-        countersLocalDataSource: CountersLocalDataSource,
-        idGenerator: IdGenerator,
-    ): CountersRepository = CountersRepositoryImpl(
-        countersRemoteDataSource = countersRemoteDataSource,
-        countersLocalDataSource = countersLocalDataSource,
-        idGenerator = idGenerator
-    )
-
-    @Provides
-    @Singleton
-    fun providePreferencesRepository(preferencesLocalDataSource: PreferencesLocalDataSource): PreferencesRepository =
-        PreferencesRepositoryImpl(preferencesLocalDataSource = preferencesLocalDataSource)
+    fun provideExampleRepository(exampleLocalDataSource: ExampleLocalDataSource): ExampleRepository =
+        ExampleRepositoryImpl(exampleLocalDataSource = exampleLocalDataSource)
     // endregion
 }

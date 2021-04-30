@@ -3,10 +3,8 @@ package dev.pimentel.template.shared.navigator
 import androidx.navigation.NavController
 import dev.pimentel.template.R
 import dev.pimentel.template.TestDispatchersProvider
-import dev.pimentel.template.presentation.welcome.WelcomeFragmentDirections
+import dev.pimentel.template.presentation.example.WelcomeFragmentDirections
 import dev.pimentel.template.shared.dispatchers.DispatchersProvider
-import dev.pimentel.template.shared.navigator.Navigator
-import dev.pimentel.template.shared.navigator.NavigatorImpl
 import io.mockk.confirmVerified
 import io.mockk.every
 import io.mockk.justRun
